@@ -1,4 +1,4 @@
-const webpack = require('webpack')
+const {HotModuleReplacementPlugin} = require('webpack')
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -13,7 +13,7 @@ const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: ['./index.js',  /*'webpack-hot-middleware/client'*/],
+    entry: ['./index.js'],
     output: {
         filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
@@ -27,9 +27,13 @@ module.exports = {
     },
     devtool: isDev ? 'source-map' : false,
     devServer: {
-        contentBase: './dist',
+        disableHostCheck: true,
+        watchContentBase: true,
+        overlay: true,
+        open: true,
+        contentBase: path.resolve(__dirname, 'dist'),
         port: 3000,
-        //hot: isDev
+        hot: isDev
     },
 
     plugins: [
@@ -52,7 +56,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: filename('css')
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new HotModuleReplacementPlugin()
 
     ],
     module: {
@@ -71,10 +75,10 @@ module.exports = {
                 test: /\.s[ac]ss$/i,
                 use: [
                     {
-                        loader:MiniCssExtractPlugin.loader,
-                        options:{
-                           // hmr: true,
-                            //reloadAll: true
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: true,
+                            reloadAll: true
                         }
                     },
                     'css-loader',
