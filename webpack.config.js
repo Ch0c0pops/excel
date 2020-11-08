@@ -1,4 +1,4 @@
-const {HotModuleReplacementPlugin} = require('webpack')
+const webpack = require('webpack')
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -13,10 +13,14 @@ const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: ['./index.js'],
+    entry: ['webpack-dev-server/client?http://localhost:3000',
+        'webpack/hot/only-dev-server',
+        './index.js'
+        ],
     output: {
         filename: filename('js'),
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/'
     },
     resolve: {
         extensions: ['.js'],
@@ -25,14 +29,16 @@ module.exports = {
             '@core': path.resolve(__dirname, 'src/core')
         }
     },
-    devtool: isDev ? 'source-map' : false,
+    devtool: isDev ? 'inline-source-map' : false,
     devServer: {
-        disableHostCheck: true,
-        watchContentBase: true,
-        overlay: true,
+        // disableHostCheck: true,
+        // watchContentBase: true,
+        // overlay: true,
+        host: 'localhost',
         open: true,
         contentBase: path.resolve(__dirname, 'dist'),
         port: 3000,
+        publicPath: '/',
         hot: isDev
     },
 
@@ -56,7 +62,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: filename('css')
         }),
-        new HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin()
 
     ],
     module: {
