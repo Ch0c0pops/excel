@@ -14,7 +14,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: ['webpack-dev-server/client?http://localhost:3000',
-        'webpack/hot/only-dev-server',
+        'webpack/hot/dev-server',
         './index.js'
         ],
     output: {
@@ -62,7 +62,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: filename('css')
         }),
-        new webpack.HotModuleReplacementPlugin()
+        // new webpack.HotModuleReplacementPlugin()
 
     ],
     module: {
