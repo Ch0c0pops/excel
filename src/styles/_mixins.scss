@@ -1,0 +1,21 @@
+@mixin button($color: green) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  outline: none;
+
+  & i {
+    color: dimgray;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    i {
+      color: $color;
+    }
+  }
+}
